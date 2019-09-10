@@ -32,7 +32,7 @@ public class RedisConfig {
             URI redisURI = new URI(System.getenv("REDISTOGO_URL"));
         RedisStandaloneConfiguration redisStandaloneConfiguration =
                 new RedisStandaloneConfiguration(redisURI.getHost(), redisURI.getPort());
-        redisStandaloneConfiguration.setPassword(RedisPassword.none());
+        redisStandaloneConfiguration.setPassword(redisURI.getUserInfo().split(":",2)[1]);
         return new JedisConnectionFactory(redisStandaloneConfiguration);
         } catch (URISyntaxException e) {
             e.printStackTrace();
