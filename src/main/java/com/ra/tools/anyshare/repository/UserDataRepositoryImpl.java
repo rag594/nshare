@@ -7,18 +7,17 @@ import org.springframework.data.redis.core.SetOperations;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Repository
 public class UserDataRepositoryImpl implements UserRepository {
 
     @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
-    private SetOperations setOperations;
+    private RedisTemplate<String, String> redisTemplate;
+    private SetOperations<String, String> setOperations;
 
-    public UserDataRepositoryImpl(RedisTemplate<String, Object> redisTemplate) {
+    public UserDataRepositoryImpl(RedisTemplate<String, String> redisTemplate) {
         this.redisTemplate = redisTemplate;
     }
 
@@ -34,9 +33,8 @@ public class UserDataRepositoryImpl implements UserRepository {
 
     @Override
     public List<Link> getAllById(String id) {
-        List<String> urlList = new ArrayList<>();
-        urlList.addAll(setOperations.members(id));
-        return urlList.stream().map(url -> new Link(url)).collect(Collectors.toList());
+        Set<String> urlList = new HashSet<>(Objects.requireNonNull(setOperations.members(id)));
+        return urlList.stream().map(Link::new).collect(Collectors.toList());
     }
 
     @Override
