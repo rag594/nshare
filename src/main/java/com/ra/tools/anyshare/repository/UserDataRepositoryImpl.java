@@ -1,5 +1,6 @@
 package com.ra.tools.anyshare.repository;
 
+import com.ra.tools.anyshare.models.Link;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SetOperations;
@@ -8,13 +9,14 @@ import org.springframework.stereotype.Repository;
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Repository
 public class UserDataRepositoryImpl implements UserRepository {
 
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
-    private SetOperations listOperations;
+    private SetOperations setOperations;
 
     public UserDataRepositoryImpl(RedisTemplate<String, Object> redisTemplate) {
         this.redisTemplate = redisTemplate;
@@ -22,19 +24,19 @@ public class UserDataRepositoryImpl implements UserRepository {
 
     @PostConstruct
     private void init() {
-        listOperations = redisTemplate.opsForSet();
+        setOperations = redisTemplate.opsForSet();
     }
 
     @Override
     public void saveLink(String id, String url) {
-        listOperations.add(id, url);
+        setOperations.add(id, url);
     }
 
     @Override
-    public List<String> getAllById(String id) {
+    public List<Link> getAllById(String id) {
         List<String> urlList = new ArrayList<>();
-        urlList.addAll(listOperations.members(id));
-        return urlList;
+        urlList.addAll(setOperations.members(id));
+        return urlList.stream().map(url -> new Link(url)).collect(Collectors.toList());
     }
 
     @Override

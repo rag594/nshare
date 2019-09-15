@@ -1,5 +1,6 @@
 package com.ra.tools.anyshare.repository;
 
+import com.ra.tools.anyshare.models.Link;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -9,7 +10,7 @@ public interface UserRepository {
 
     void saveLink(String id, String url);
 
-    List<String> getAllById(String id);
+    List<Link> getAllById(String id);
 
     String getLatestById(String id);
 }

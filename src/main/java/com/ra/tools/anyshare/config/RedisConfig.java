@@ -7,8 +7,6 @@ import com.ra.tools.anyshare.queue.RedisMessageSubscriber;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.data.redis.connection.RedisPassword;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -27,13 +25,13 @@ import java.net.URISyntaxException;
 public class RedisConfig {
 
     @Bean
-    JedisConnectionFactory jedisConnectionFactory() {
+    public JedisConnectionFactory jedisConnectionFactory() {
         try {
             URI redisURI = new URI(System.getenv("REDISTOGO_URL"));
-        RedisStandaloneConfiguration redisStandaloneConfiguration =
-                new RedisStandaloneConfiguration(redisURI.getHost(), redisURI.getPort());
-        redisStandaloneConfiguration.setPassword(redisURI.getUserInfo().split(":",2)[1]);
-        return new JedisConnectionFactory(redisStandaloneConfiguration);
+            RedisStandaloneConfiguration redisStandaloneConfiguration =
+                    new RedisStandaloneConfiguration(redisURI.getHost(), redisURI.getPort());
+            redisStandaloneConfiguration.setPassword(redisURI.getUserInfo().split(":",2)[1]);
+            return new JedisConnectionFactory(redisStandaloneConfiguration);
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
@@ -49,7 +47,7 @@ public class RedisConfig {
     }
 
     @Bean
-    MessageListenerAdapter messageListener() {
+    public MessageListenerAdapter messageListener() {
         return new MessageListenerAdapter(new RedisMessageSubscriber());
     }
 
@@ -67,7 +65,7 @@ public class RedisConfig {
     }
 
     @Bean
-    ChannelTopic topic() {
+    public ChannelTopic topic() {
         return new ChannelTopic("pubsub:queue");
     }
 }
