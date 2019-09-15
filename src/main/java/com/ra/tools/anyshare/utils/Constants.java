@@ -5,5 +5,4 @@ public final class Constants {
     public static final String AUTHENTICATION_URL = ROOT_URL+"/user/signin";
     public static final String SIGNUP_URL = ROOT_URL+"/user/signup";
     public static final String VERIFY_URL = ROOT_URL+"/user/verify";
-    public static final String APP_SECRET = "vwgivv8do8h";
 }

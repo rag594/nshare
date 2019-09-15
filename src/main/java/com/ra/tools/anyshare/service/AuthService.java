@@ -48,7 +48,7 @@ public class AuthService {
         Gson gson = new Gson();
 
         HttpPost httpPost = new HttpPost(Constants.SIGNUP_URL);
-        httpPost.addHeader("app_key", Constants.APP_SECRET);
+        httpPost.addHeader("app_key", System.getenv("APP_SECRET"));
         httpPost.addHeader("Content-Type", "application/json");
 
         StringEntity stringEntity = new StringEntity(gson.toJson(user));
@@ -62,7 +62,7 @@ public class AuthService {
         Gson gson = new Gson();
 
         HttpPost httpPost = new HttpPost(Constants.VERIFY_URL);
-        httpPost.addHeader("app_key", Constants.APP_SECRET);
+        httpPost.addHeader("app_key", System.getenv("APP_SECRET"));
         httpPost.addHeader("Content-Type", "application/json");
 
         Map<String, String> accessTokenMap = new HashMap<>();
